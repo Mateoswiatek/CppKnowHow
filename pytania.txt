@@ -1,0 +1,14 @@
+Różnice w Inicjalizacji Atrybutów:
+lista inicjalizacyjna:
+1. rezerwowana jest pamięć
+2. Wpisywane są wartości
+3. Tworzony jest obiekt, którego odpowiednie pola mają adresy pamięci z 1.
+Natomiast zwykłe:
+1. Rezerwowana jest pamięć dla obiektu.
+2. Tworzony jest obiekt na tej pamięci.
+3. Modyfikujemy zawartość pamięci.
+
+
+
+Własny projekt:
+jak usunąć pewne pozycje ze wszystkich rekordów w CSV (JSON) około 13000 rekordów. optymalnie.

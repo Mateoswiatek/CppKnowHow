@@ -1,0 +1,291 @@
+Dowolny element dziedziny może zostać zaimplementowany jako obiekt i włączony do programu.
+
+Klasa określa wspólne własności i zachowanie należących do niej obiektów.
+
+Obiekt może być traktowany jak zmienna przechowująca dane. W idealnej postaci, dane te są ukryte.
+
+    Aby zmodyfikować obiekt lub odczytać jego dane wysyłamy do obiektu odpowiednie polecenie za pomocą komunikatu.
+W języku C++ wysłanie komunikatu jest utożsamiane z wywołaniem funkcji. W odpowiedzi obiekt wykonuje operacje na swojej zawartości.
+
+Grupowanie obiektów - zawieramy jedne obiekty w drugich aby ukrywamy złożonośc problemu
+
+Każdy obiekt należy do pewnej klasy. Klasa jest synonimem typu. Obiekty moga należeć do więcej niż 1 klasy.
+
+Atrybuty i metody:
+ogólnie dostępnego interfejsu
+pomocniczą przy implementacji klasy (ukrywamy)
+    • aby uchronić się przed błędami poprzez nieodpowiedni dostęp do nich.
+    • tworząc bibliotekę klas ustalić i zawsze realizować pewien publiczny interfejs
+      natomiast dowolnie zmieniać część prywatną implementacji w kolejnych wersjach biblioteki
+
+Pola i moeody
+public ogólnie dostępne
+private nie są dostępne z zewnątrz
+protected nie są dostępne z zewnątrz, natomiast są dostępne dla dziedziczących po danej klasie.
+friend (klasy i funkcje) =  zaprzyjaźnione, dostęp do prywatnych i chronionych składowych klas (pól i metod).
+    bo zdarza się, że jakaś klasa/funkcja potrzebuje dostępu do prywatnych lub chronionych składowych klasy.
+    Deklaracje przyjaźni umieszcza się w klasie, która ma udostępniać swoje składowe wybranym klasom i/lub funkcjom.
+
+W2 Wyklad2 Wyklad Referencja Referencje
+
+Referencje typ podobnie jak wskaźnik - wartościami są adresy + info o typie na jaki wskazuje
+różnce - brak *nazwa, jest wywoływany autoamtycznie.
+Referencji nie można przestawiać, tak aby wskazywała inny obiekt.
+
+odczytać lub zmodyfikować wartość (atrybuty) obiektu zajmującego pamięć identyfikowaną przez adres
+wywołać metodę obiektu
+
+Składnia deklaracji:
+type-specifier & reference
+type-specifier - definiuje typ wskazywanego obiektu
+reference - identyfikator zmiennej
+
+Inicjalizowanie poprzez listę onocjalizacyjną - przypisuje wartość do zmiennej podczas tworzenia obiektu, zanim zostanie uruchomiony konstruktor klasy. Przy referencjach.
+W przypadku pól klasy, szczególnie gdy są to stałe i referencje, konieczne jest użycie listy inicjalizacyjnej, ponieważ zmienne te muszą być zainicjalizowane w momencie tworzenia obiektu, a nie po jego utworzeniu.
+
+// Atrybuty Klas
+//klasy za pomocą class, struct lub union
+Definicja klasy najczęściej obejmuje:
+• atrybuty (pola)
+• metody (funkcje składowe)
+• jeden lub kilka konstruktorów
+• jeden destruktor
+Deklaracja klas z użyciem słów struct i union jest zapewniona dla zgodności z językiem C.
+Standardowo, dostęp do ich metod i pól jest publiczny.
+W przypadku użycia słowa kluczowego CLASS, standardowo dostęp jest PRYWATNY.
+
+
+Deklaracja Klas
+class identifier [base-class-specifier] {
+    member-list
+};
+
+• Nazwa klasy staje się widoczna dla kompilatora bezpośrednio po przetworzeniu nagłówka klasy.
+• Deklaracja klasy wprowadza nowy identyfikator do przestrzeni nazw. Deklaracje te są równocześnie
+definicjami typu w danej jednostce translacji (kompilowanym pliku źródłowym).
+
+// Podział dokumentów
+Definicje klas są zazwyczaj używane w większej liczbie
+jednostek translacji, stąd typową praktyką jest
+umieszczenie ich w plikach nagłówkowych (*.h).
+Implementacje metod klas umieszcza się w plikach *.cpp
+(odrębnych jednostkach translacji).
+
+a.h
+class A
+{
+public:
+    A();
+};
+
+b.h
+#include "a.h"
+class B //potrzebujemy znać a dlatego wyżej ją dołączamy
+{
+public:
+    B();
+    A a;
+};
+
+Kompilator kompiluje jednostki translacji - pliki cpp
+wraz z włączonymi nagłówkami.
+
+W danej jednostce translacji może pojawić się dokładnie jedna definicja klasy. Problemem jest, śledzenie zależności
+pomiędzy plikami nagłówkowymi.
+
+Najczęściej stosowanym zabezpieczeniem jest użycie dyrektyw warunkowej kompilacji: // jeśli nie zdefiniowano
+a.h
+#if !defined _a_h_
+#define _a_h_
+class A
+{
+    public:
+    A();
+};
+#endif // _a_h_
+
+1. Klasa A zostanie zdefiniowana. Zdefiniowany zostanie symbol preprocesora _a_h_
+2. Włączony zostanie nagłówek b.h. Przetwarzanie b.h pociągnie włączenie a.h.
+Ponieważ _a_h_ istnieje w słowniku symboli preprocesora, powtórna definicja klasy
+A jest pomijana.
+
+Elementy Składowe
+Klasy mogą mieć następujące elementy składowe:
+• funkcje składowe (metody)
+• przechowywane dane (pola, atrybuty)
+• klasy zagnieżdżone (wewnętrzne)
+• wyliczenia (enum)
+• pola bitowe
+• deklaracje klas zaprzyjaźnionych (friend)
+• wewnętrzne deklaracje typów
+Elementy klas mogą być zadeklarowane z użyciem modyfikatorów:
+CONST i STATIC.
+
+Metody obiektu
+W metodach należących do obiektu możemy bezpośrednio odwoływać się do jego danych.
+    (Domyślnie odwołujemy się do tego obiektu, którego metoda jest wołana – this.)
+W funkcjach składowych należących obiektu możemy wołać inne
+    metody danego obiektu.
+Wołając metody spoza obiektu wskazujemy obiekt, do którego wysyłamy komunikaty podając
+    nazwę obiektu, wskaźnik lub referencję.
+Funkcje, które nie modyfikują obiektu mogą być zadeklarowane jako const.
+    void dump(const StrComplex*pc);
+    void dump()const;
+Funkcje składowe mogą być implementowane wewnątrz definicji klasy lub poza nią – dump().
+
+Wewnątrz niestatycznych metod obiektu można posługiwać się niemodyfikowalnym (const) wskaźnikiem
+this do obiektu danej klasy. Jest on domyślnym ukrytym argumentem każdej niestatycznej funkcji składowej.
+CLASS * const this;
+
+Za pośrednictwem wskaźnika this można realizować dostęp do funkcji składowych i danych.
+W niektórych przypadkach pomaga to rozwiązać niejednoznaczności.
+Wskaźnika this używa się także często przy konieczności zwrócenia referencji do danego obiektu.
+
+
+Funkcje Inline
+Funkcje inline, to funkcje, których wywołanie jest bezpośrednio zastępowane kodem funkcji.
+W przypadku bardzo krótkich funkcje = ekonomiczne, znika narzut na
+wywołanie funkcji, powrót z wywołania oraz przesyłanie w obie strony danych poprzez stos.
+Wygenerowany kod może działać szybciej i być mniejszy.
+
+Funkcje zaimplementowane wewnątrz definicji klasy w miarę możliwości są jako funkcje inline.
+Alternatywnie, funkcje które są implementowane poza definicją klasy mogą być kompilowane jako
+funkcje inline po poprzedzeniu ich słowem kluczowym inline (traktowanym jako wskazówka dla kompilatora).
+
+Kompilator ignoruje słowo kluczowe inline w przypadku, kiedy funkcja jest funkcją rekurencyjną
+lub może być wywoływana za pośrednictwem wskaźnika.
+
+Składowe Static
+
+Pola statyczne klasy istnieją niezależnie od tego, czy istnieje jakikolwiek obiekt danej klasy.
+Z tego powodu pojawienie się statycznych pól w definicji klasy jest traktowane jak deklaracja extern,
+która wymaga odrębnej definicji, podczas której można także inicjować zmienne statyczne wartościami początkowymi.
+
+Klasy zagnieżdżone (ang. nested, inner class)
+zadeklarowane wewnątrz innej klasy, jako pomocniczne struktury danych,
+aby nie wprowadzać nazwy która by kolidowała z już istniejącymi
+
+Deklaracja klasy zagnieżdżonej jest jedynie deklaracją typu
+
+
+Wyliczenia w main
+
+Biblioteki Standardowe
+
+Wektor, lista mogą być parametryzowane elementami dowolnego typu… za pomocą auto
+
+<vector> = std::vector<int> liczby;
+vector zapewnia funkcjonalność tablicy przyrastającej w miarę dodawania elementów.
+vector jest szablonem. Oznacza to, że w kodzie źródłowym tablica nie ma określonego typu,
+ale zamiast niego używany jest jakiś symbol, na przykład T.
+W momencie tak zwanej instancjacji automatycznie tworzony jest kod dla tablicy wskazanego typu
+string = string s="Tekst";
+Klasa std::string reprezentującą tablicę znakową, która może dynamicznie zmieniać swoje rozmiary.
+Poza funkcjami do zarządzania pamięcią, klasa zawiera szereg metod umożliwiających dostęp
+do znaków lub działania na całych tekstach (konkatenacja, usuwanie, wstawianie, zastępowanie, itd.)
+
+<list> = list<int> lst{11,23,}
+Szablon definiuje listę dwukierunkową.
+Możliwe jest:
+    – dodawanie elementów na początku i końcu listy,
+    – wstawianie, usuwanie, łączenie ze sobą list.
+    – automatyczne sortowanie listy.
+Nie jest możliwy swobodny dostęp do elementów za pośrednictwem operatora [].
+Lista jest efektywna, jeżeli liczba elementów i ich miejsce wstawienia nie są z góry określone.
+Iteracja po liście wymaga użycia iteratorów albo pętli range-based for
+
+Słownik – szablon <map>
+
+Słownik jest zapisem funkcji odwzorowującej klucze w wartości. Jest więc zbiorem par (klucz, wartość).
+    – W słowniku może wystąpić tylko pojedyncza instancja klucza.
+    – Dana wartość może być przypisana wielu kluczom.
+Szablon map jest optymalizowany, aby zapewnić dużą prędkość wyszukiwania elementów słownika, dlatego
+    jest implementowany jako drzewo.
+Klasa może być użyta jako klucz, jeżeli zapewnia operator < do porównywania elementów lub jest typem
+wbudowanym zapewniającym ten operator domyślnie.
+
+Zbiór jest kontenerem, który przechowuje unikalne wartości elementów.
+Szablon definiuje trzy podstawowe metody:
+    insert() – dodaje element
+    empty() – testuje czy zbiór jest pusty
+    find() – znajduje element w zbiorze
+Zbiór jest implementowany jako drzewo, dlatego elementy zbioru muszą spełniać takie same
+wymagania dotyczące interfejsu, jak klucze dla słownika: definiować operator <.
+
+Wyklad 2 - Kompozycja i dziedziczenie
+
+Wykorzystanie tego co już mamy napisane możemy użyć na dwa sposoby:
+Kompozycja ( agregacja )
+- użycie istniejącego obietu jako podobiektu (atrybutu) nowej klasy
+
+Dziedziczenie
+- Stworzenie nowej klasy obiektów rozszezżających funkcjonalność istniejącej klasy.
+( nowa klasa nazywana jest klasą potomną , ta po której dziedziczy to klasa bazowa)
+
+
+Jest Analiza obiektowa
+- ma, zawiera, obejmuje (agregacja)
+- składa się (kompozycja)
+Np Powiat składa się z Gmin,
+Budynek zawiera mieszkania
+
+Zazwuczaj przy usuwaniu obiektu nadrzędnego usuwane są również komponenty.
+
+Kompozycja a Agregacja:
+W Kompozycji właściciel jest w pełni władzy nad obiektem, jeśli nadrzędny (właściciel)
+zostanie usunięty, to usunięty zostanie również obiekt
+
+A w agregacji, obiekt jest jakby na zewnątrz, i w teorii może być drugi właściciel.
+Obiket może być dzielony między właścicielami
+
+Dziedziczenie
+
+Interfejs bazowej jest w pełni (zaznwyczaj) zachowany, przyjmuje te same komunikaty
+Dodaje nowe elementy
+- metody
+- atrybuty
+- może również inaczej reagować na komunikaty (nadpisywać metody klasy bazowej) np
+trójkąt dziedziczy po figurze geometrycznej, to metoda "narysuj" w figurze geometrycznej nic nie narysuje.
+Dziedziczenie za pomocą " : "
+
+Często klasa bazowa nazywana jest generalizacją natomiast klasa potomna specjalizacją.
+potomna jest podzbiorem większej, dlatego tak to jest
+
+Mówimy że klasa potomna jest rodzajem klasy bazowej
+Okrąg jest rodzajem Kształtu
+Samochód Osobowy jest rodzajem Pojazdu
+
+W wielu językach mają one wspólny korzeń – klasę Object, stąd mówimy
+o hierarchiach obiektowych ( wszystko dziedziczy ostatecznie z jednej klasy )
+
+Można dziedziczyć na różne sposoby
+Słowa kluczowe defnują prawa dostępu do elemnetów klasy bazowej
+
+Określamy w jakiej kategorii będą rzeczy z klasy po której dziedziczymy.
+z poza klasy pochodnej, nie będzie dostępu do metod klasy bazowej (jeśli private / protected)
+nie będzie można sięgnąć do komponentów klasy bazowej za pomocą obiektu,
+referencji, wskaźnika do klasy pochodnej. - zabezpieczenie dodatkowe
+
+Dziedziczenie wielokrotne
+
+Kiedy klasa dziedziczy po wielu klasach, i żadna z nich nie jest specjalizacją / generalizacją drugiej.
+"Część wspólna" dwóch różnych klas.
+atrybuty i metoy z różnych klas.
+Podaje sie na liście klasy bazowe, można z różnymi prawami dostępu.
+
+Jeśli nazwy atrybutów / metod się pokrywają, to można do konkretnych za pomocą operatora zasięgu ::
+object_name.Base1::attribute
+
+To jest problem w Cpp. bo może że gdzieś tam wysoko dwie klasy dziedziczą po jednej.
+Dziedziczenie wirtualne jest związane wyłącznie ze ścieżką
+dziedziczenia, a nie z klasą.
+
+Dana klasa może zostać równocześnie odziedziczona wirtualnie i niewirtualnie, stąd aby wykorzystać zalety
+dziedziczenia wirtualnego, należy je konsekwentnie stosować na wszystkich ścieżkach.
+
+W praktyce, dziedziczenie wirtualne stosuje się rzadko.
+Aby usunąć problemy konfliktu i niejednoznaczności nazw, należałoby zmodyfikować tryb dziedziczenia po
+klasach znajdujących się u podstawy hierarchii, a więc zmodyfikować kod bibliotek (czego zawsze unika się.)
+
+
+
